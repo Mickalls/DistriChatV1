@@ -28,6 +28,19 @@ public class UserAuthService {
         this.jwtUtil = jwtUtil;
     }
 
+    public User register(String phone, String password) {
+        User user = userMapper.findByPhone(phone);
+        if (user != null) {
+            throw BusinessException.badRequest("手机号已被注册");
+        }
+
+        User newUser = new User(phone, password);
+        newUser.setNickname(phone);
+
+        userMapper.insert(newUser);
+        return newUser;
+    }
+
     public User login(String phone, String password) {
         User user = userMapper.findByPhone(phone);
         if (user == null) {

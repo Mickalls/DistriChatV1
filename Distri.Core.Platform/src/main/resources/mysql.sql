@@ -13,5 +13,3 @@ CREATE TABLE IF NOT EXISTS users (
     UNIQUE KEY uk_phone (phone)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户表';
 
--- 如果索引已存在则不会报错（MySQL 8.0+ 支持 IF NOT EXISTS）
-CREATE UNIQUE INDEX IF NOT EXISTS uk_phone ON users(phone);

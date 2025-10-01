@@ -1,10 +1,7 @@
 package com.distri.chat.biz.user.domain.model;
 
 import com.baomidou.mybatisplus.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -31,7 +28,7 @@ public class User {
     private String avatar;
 
     @TableField(value = "status")
-    private String status; // ACTIVE, INACTIVE, BANNED
+    private String status; // ACTIVE, INACTIVE, BANNED, ...
 
     @TableField(value = "extra")
     private String extra; // JSON字符串
@@ -44,5 +41,14 @@ public class User {
 
     @TableLogic
     @TableField(value = "deleted")
-    private Integer deleted;
+    private Integer deleted; // 0 means not deleted
+
+    public User(String phone, String password) {
+        this.phone = phone;
+        this.password = password;
+        this.status = "ACTIVE";
+        this.createTime = LocalDateTime.now();
+        this.updateTime = LocalDateTime.now();
+        this.deleted = 0;
+    }
 }

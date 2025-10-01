@@ -1,7 +1,8 @@
 package com.distri.chat.biz.user.api;
 
 import com.distri.chat.biz.user.api.request.UserLoginRequest;
-import com.distri.chat.biz.user.api.response.UserLoginResponse;
+import com.distri.chat.biz.user.api.request.UserRegisterRequest;
+import com.distri.chat.biz.user.api.response.UserAuthResponse;
 import com.distri.chat.biz.user.domain.model.User;
 import com.distri.chat.biz.user.domain.service.UserAuthService;
 import com.distri.chat.common.dto.Result;
@@ -28,17 +29,34 @@ public class AuthController {
         this.userAuthService = userAuthService;
     }
 
-    @Operation(summary = "用户登录", description = "通过手机号和密码登录")
-    @PostMapping("/login")
-    public Result<UserLoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
-        User user = userAuthService.login(request.getPhone(), request.getPassword());
-        String clientId = userAuthService.generateClientId();
+    @Operation(summary = "用户注册", description = "通过手机号和密码注册")
+    @PostMapping("/register")
+    public Result<UserAuthResponse> register(@Valid @RequestBody UserRegisterRequest req) {
 
-        // 生成访问令牌
+        User user = userAuthService.register(req.getPhone(), req.getPassword());
+
+        String clientId = userAuthService.generateClientId();
         String accessToken = userAuthService.generateAccessToken(user.getId(), clientId);
 
-        // 构造响应
-        UserLoginResponse response = new UserLoginResponse(
+        UserAuthResponse response = new UserAuthResponse(
+                user.getId(),
+                accessToken,
+                clientId,
+                user.getNickname(),
+                user.getAvatar()
+        );
+
+        return Result.success(response);
+    }
+
+    @Operation(summary = "用户登录", description = "通过手机号和密码登录")
+    @PostMapping("/login")
+    public Result<UserAuthResponse> login(@Valid @RequestBody UserLoginRequest req) {
+        User user = userAuthService.login(req.getPhone(), req.getPassword());
+        String clientId = userAuthService.generateClientId();
+        String accessToken = userAuthService.generateAccessToken(user.getId(), clientId);
+
+        UserAuthResponse response = new UserAuthResponse(
                 user.getId(),
                 accessToken,
                 clientId,
