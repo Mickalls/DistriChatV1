@@ -2,4 +2,13 @@
 
 repo说明:
 - Distri.Core.Platform: 单体架构核心服务, all in one
-- more in future
+- frontend: 前端代码
+
+
+前端代码开发模式热重载:
+
+```
+cd frontend
+npm run dev
+# 浏览器打开 http://localhost:5173/
+```

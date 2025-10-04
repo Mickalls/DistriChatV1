@@ -34,7 +34,9 @@ public class UserAuthService {
             throw BusinessException.badRequest("手机号已被注册");
         }
 
-        User newUser = new User(phone, password);
+        String encodedPassword = passwordEncoder.encode(password);
+
+        User newUser = new User(phone, encodedPassword);
         newUser.setNickname(phone);
 
         userMapper.insert(newUser);
